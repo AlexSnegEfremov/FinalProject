@@ -55,4 +55,12 @@ public class Role implements GrantedAuthority {
     public void setUserSet(Set<User> userSet) {
         this.userSet = userSet;
     }
+    @Override
+    public String toString() {
+        if (name.equals("ROLE_USER")) {
+            return "USER - только просмотр информации";
+        } else if (name.equals("ROLE_ADMIN")) {
+            return "ADMIN - Вам доступны любые действия в системе";
+        } else return "ADMIN + USER";
+    }
 }
