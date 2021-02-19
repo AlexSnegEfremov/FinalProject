@@ -1,6 +1,7 @@
 package com.example.spring.boot.projekt.Efremov.controller;
 
 
+import com.example.spring.boot.projekt.Efremov.service.RoleService;
 import com.example.spring.boot.projekt.Efremov.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,27 +15,23 @@ import java.security.Principal;
 @RequestMapping("/")
 public class UserController {
 
-
     private final UserService userService;
+    private final RoleService roleService;
 
-    @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
-    @GetMapping()
-    public String getHomePage() {
-        return "home";
+    @GetMapping("/index")
+    public String getIndexPage(Model model, Principal principal) {
+        model.addAttribute("autUser", userService.getUserByLogin(principal.getName()));
+        model.addAttribute("allRoles", roleService.getAllRoles());
+        return "index";
     }
 
-    @GetMapping(value = "/login")
-    public String getLoginPage() {
-        return "login";
-    }
-
-    @GetMapping("/user")
-    public String user(Model model, Principal principal) {
-        model.addAttribute("oneUser", userService.getUserByEmail(principal.getName()));
-        return "userLogin";
+    @GetMapping
+    public String redirectToIndexPage() {
+        return "redirect:/index";
     }
 }

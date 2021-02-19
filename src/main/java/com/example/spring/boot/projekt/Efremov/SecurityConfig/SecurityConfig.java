@@ -1,6 +1,5 @@
 package com.example.spring.boot.projekt.Efremov.SecurityConfig;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,40 +16,41 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
+
     private final LoginSuccessHandler loginSuccessHandler;
 
-    @Bean // создаем бин шифрования
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Autowired // сетаем юзердетейлс и хандлер
     public SecurityConfig(@Qualifier("userService") UserDetailsService userDetailsService,
                           LoginSuccessHandler loginSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.loginSuccessHandler = loginSuccessHandler;
     }
 
-    @Autowired // конфигурация для прохождения аутентификации
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
-    @Override // конфиг для перехода по ролям
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf()
+        http
+                .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/", "/login").not().fullyAuthenticated()
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/user/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-                .anyRequest().not().access("hasRole('ROLE_USER')")
+                .antMatchers( "/login").not().fullyAuthenticated()
+                .antMatchers("/api/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/index").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+                .anyRequest().permitAll()
                 .and()
-                .formLogin().loginPage("/login")
+                .formLogin()
                 .successHandler(loginSuccessHandler);
         http.logout()
                 .permitAll()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login");
     }
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }

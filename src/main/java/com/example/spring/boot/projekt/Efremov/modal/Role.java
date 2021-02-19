@@ -11,56 +11,81 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "roles")
-@NoArgsConstructor
-@AllArgsConstructor
-//@Data
+@Table (name = "roles")
 public class Role implements GrantedAuthority {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "role")
-    private String name;
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private int id;
 
-    private @ManyToMany(mappedBy = "roleSet")
-    Set<User> userSet;
+    @Column
+    private String role;
 
+    @Transient
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> user;
 
-    @Override
-    public String getAuthority() {
-        return name;
+    public Role(int id, String role, Set<User> user) {
+        this.id = id;
+        this.role = role;
+        this.user = user;
+    }
+    public Role(Set<User> user, String role) {
+        this.user = user;
+        this.role = role;
     }
 
-
-    public Long getId() {
-        return id;
+    public Role() {
     }
 
-    public void setId(Long id) {
+    public Role(int id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Role(Integer id, String role) {
+        this.id = id;
+        this.role = role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getId() {
+        return id;
     }
 
-    public Set<User> getUserSet() {
-        return userSet;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setUserSet(Set<User> userSet) {
-        this.userSet = userSet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(id, role.id);
     }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Override
+    public String getAuthority() {
+        return role;
+    }
+
     @Override
     public String toString() {
-        if (name.equals("ROLE_USER")) {
-            return "USER - только просмотр информации";
-        } else if (name.equals("ROLE_ADMIN")) {
-            return "ADMIN - Вам доступны любые действия в системе";
-        } else return "ADMIN + USER";
+        return role;
+    }
+
+    public Set<User> getUser() {
+        return user;
+    }
+
+    public void setUser(Set<User> user) {
+        this.user = user;
     }
 }

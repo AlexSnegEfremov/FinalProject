@@ -9,18 +9,16 @@ import java.util.List;
 
 @Service
 public class RoleService {
-    private final RoleDao roleDao;
-
     @Autowired
-    public RoleService(RoleDao roleDao) {
-        this.roleDao = roleDao;
+    RoleDao roleRepository;
+
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 
     public Role getRoleByName(String name) {
-        return roleDao.getRoleByName(name);
+        return roleRepository.findByRole(name);
     }
 
-    public List<Role> getListRole() {
-        return roleDao.findAll();
-    }
 }
+

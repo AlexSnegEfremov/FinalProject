@@ -21,62 +21,44 @@ import java.util.Set;
 @Service
 public class UserService implements UserDetailsService {
 
-    private final UserDao userDao;
+    private final UserDao userRepository;
 
     @Autowired
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
+    public UserService(UserDao userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @Transactional
-    public List<User> getAllUser() {
-        return userDao.findAll();
+    public void saveUser(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userRepository.save(user);
     }
 
-    @Transactional
-    public void save(User user) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDao.save(user);
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
-    @Transactional
-    public void edit(User user) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!userDao.getOne(user.getId()).getPassword().equals(user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        userDao.saveAndFlush(user);
-    }
-
-    @Transactional
-    public void delete(long id) {
-        userDao.deleteById(id);
-    }
-
-    @Transactional
-    public User getUserById(long id) {
+    public User getUserById(int id) {
         User user = null;
-        Optional<User> optionalUser = userDao.findById(id);
+        Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             user = optionalUser.get();
         }
         return user;
-
     }
 
-    @Transactional
-    public User getUserByEmail(String email) {
-        return userDao.findByEmail(email);
+    public User getUserByLogin(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public void deleteUserById(int id) {
+        userRepository.deleteById(id);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userDao.findByEmail(s);
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role : user.getRoleSet()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
-        }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        return user;
     }
+
 }
