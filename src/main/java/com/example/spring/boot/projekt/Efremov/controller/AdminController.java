@@ -43,7 +43,7 @@ public class AdminController {
 
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) {
-        userService.saveUser(user);
+        userService.updateUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

@@ -74,21 +74,21 @@
                                 <div class="card-block mx-auto p-2">
                                     <form class="text-center fw-bold">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="name1">Имя</label>
-                                            <input class="form-control" id="name1"
+                                            <label class="col-form-label" for="nameAdd">Имя</label>
+                                            <input class="form-control" id="nameAdd"
                                                    name="name" type="text">
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="col-form-label" for="surname1">Фамилия</label>
-                                            <input class="form-control" id="surname1"
+                                            <label class="col-form-label" for="surnameAdd">Фамилия</label>
+                                            <input class="form-control" id="surnameAdd"
                                                    name="surname" type="text">
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-form-label"
-                                                   for="department1">Департамент</label>
-                                            <input class="form-control" id="department1"
+                                                   for="departmentAdd">Департамент</label>
+                                            <input class="form-control" id="departmentAdd"
                                                    name="department" type="text" value="">
                                         </div>
 
@@ -100,8 +100,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="col-form-label" for="password1">Пароль</label>
-                                            <input class="form-control" id="password1"
+                                            <label class="col-form-label" for="passwordAdd">Пароль</label>
+                                            <input class="form-control" id="passwordAdd"
                                                    name="password" type="text">
                                         </div>
 
@@ -222,6 +222,7 @@
                                 id="userRoles" multiple name="roles">
                             <option
                                     th:each="oneRole: ${allRoles}"
+                                    th:selected="${oneRole.role == 'ROLE_USER'}"
                                     th:text="${oneRole.role}"
                                     th:value="${oneRole.id}">all roles
                             </option>

@@ -6,6 +6,15 @@ let API = function () {
         saveUser: function (user, callback) {
             $.ajax({
                 url: 'api/users',
+                type: 'POST',
+                data: JSON.stringify(user),
+                contentType: "application/json; charset=utf-8",
+                success: callback
+            });
+        },
+        updateUser: function (user, callback) {
+            $.ajax({
+                url: 'api/users',
                 type: 'PUT',
                 data: JSON.stringify(user),
                 contentType: "application/json; charset=utf-8",
@@ -72,7 +81,7 @@ $(function () {
                     user[userRolesSelect.attr('name')] = userRolesSelect.find('option:selected').map(function () {
                         return $(this).val();
                     }).toArray();
-                    api.saveUser(user, function (responseUser) {
+                    api.updateUser(user, function (responseUser) {
                         editModal.find('#userCloseButton').click();
                         updateUsers();
                     });
