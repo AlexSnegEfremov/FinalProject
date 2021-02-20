@@ -92,11 +92,11 @@
                                                    name="department" type="text" value="">
                                         </div>
 
-                                        <div class="form-group">
-                                            <label class="col-form-label"
-                                                   for="emailAdd">Почта</label>
-                                            <input class="form-control" id="emailAdd"
-                                                   name="email" type="text">
+                                        <div class="form-group" >
+                                            <label class="col-form-label "
+                                                   for="emailAdd" >Почта</label>
+                                            <input  class="form-control" id="emailAdd"
+                                                   name="email" type="text"><span id="validAdd"></span>
                                         </div>
 
                                         <div class="form-group">
@@ -119,7 +119,7 @@
                                             </select>
                                         </div>
                                         <br>
-                                        <button class="btn btn-success" type="button" id="addUserButton">Добавить нового пользователя</button>
+                                        <button class="btn btn-success" type="button" id="addUserButton" disabled >Добавить нового пользователя</button>
                                     </form>
                                 </div>
                             </div>
@@ -207,7 +207,7 @@
                         <label class="col-form-label"
                                for="userEmail">Почта</label>
                         <input class="form-control" id="userEmail"
-                               name="email" type="text" value="">
+                               name="email" type="text" value=""><span id="validEdit"></span>
                     </div>
 
                     <div class="form-group">
@@ -234,7 +234,7 @@
                             data-dismiss="modal"
                             id="userCloseButton" type="button">Отменить
                     </button>
-                    <button class="btn btn-primary" id="userEditButton" type="button">Сохранить изменения
+                    <button class="btn btn-primary" id="userEditButton" type="button" disabled>Сохранить изменения
                     </button>
                 </div>
             </div>

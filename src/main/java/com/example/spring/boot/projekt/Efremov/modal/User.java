@@ -95,6 +95,7 @@ public class User implements UserDetails {
                 .collect(Collectors.toSet());
     }
 
+
     @JsonProperty("roles")
     public void setRoleTitles(Set<Integer> roleTitles) {
         roles = roleTitles.stream()
