@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "table_user", uniqueConstraints = {@UniqueConstraint(columnNames = "login")})
+@Table(name = "table_user", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -36,7 +36,7 @@ public class User implements UserDetails {
     @Column(name = "department")
     private String department;
 
-    @Column(name = "login")
+    @Column(name = "email")
     private String email;
 
     @Column(name = "password")

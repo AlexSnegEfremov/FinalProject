@@ -1,51 +1,48 @@
 package com.example.spring.boot.projekt.Efremov.controller;
 
-import com.example.spring.boot.projekt.Efremov.modal.Role;
 import com.example.spring.boot.projekt.Efremov.modal.User;
-import com.example.spring.boot.projekt.Efremov.service.RoleService;
 import com.example.spring.boot.projekt.Efremov.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @RestController
 @RequestMapping("/api/users")
+@AllArgsConstructor
 public class AdminController {
 
+    //@Autowired lombok constructor
     private final UserService userService;
 
-    public AdminController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping
     public ResponseEntity<List<User>> showAllUser() {
         List<User> allUsers = userService.getAllUsers();
-        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+        return ResponseEntity.ok(allUsers);
     }
 
     @PostMapping
     public ResponseEntity<User> addNewUser(@RequestBody User user) {
         userService.saveUser(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.updateUser(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> searchUserById(@PathVariable int id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
+
+    }
+
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable int id) {
